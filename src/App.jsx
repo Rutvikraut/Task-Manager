@@ -1,15 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import Layout from './Layout/Layout'
+import { ThemeProvider } from './Context/ThemeContext'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [theme,setThemeMode]=useState(localStorage.getItem('theme')||"light")
+
+  const lightTheme=()=>{
+    setThemeMode("light")
+  }
+
+  const darkTheme=()=>{
+    setThemeMode("dark")
+  }
+
+  useEffect(()=>{
+    document.querySelector('html').classList.remove('dark','light')
+    document.querySelector('html').classList.add(theme)
+    localStorage.setItem('theme', theme);
+  },[theme])
 
   return (
-    <>
-    <h1 className="text-3xl font-bold underline">Task Manager</h1>
-    </>
+
+      <ThemeProvider value={{themeMode:theme,lightTheme,darkTheme}}>
+        <Layout/>
+      </ThemeProvider>
   )
 }
 
